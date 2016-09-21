@@ -5,8 +5,8 @@ var dataset = require('./dataset.json');
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
-var hundredThousandairs = dataset.bankBalances.filter((element) =>{
- console.log(element);
+var hundredThousandairs = dataset.bankBalances.filter((element) => {
+
  return element.amount > 100000;
 });
 
@@ -21,7 +21,13 @@ var hundredThousandairs = dataset.bankBalances.filter((element) =>{
     }
   assign the resulting array to `roundedDollar`
 */
-var roundedDollar = null;
+var roundedDollar = dataset.bankBalances.map((account) => {
+  return{
+    'amount': account.amount,
+    'state': account.state,
+    'rounded': Math.round(account.amount)
+  }
+});
 
 /*
   set a the `amount` value for each object in bankBalances
@@ -33,10 +39,18 @@ var roundedDollar = null;
     }
   assign the resulting array to `roundedDime`
 */
-var roundedDime = null;
+var roundedDime = dataset.bankBalances.map((account) => {
+  return {
+    'amount': Math.round(10 * account.amount) / 10,
+    'state': account.state
+  }
+});
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = null;
+var sumOfBankBalances = dataset.bankBalances.reduce((previousValue, currentValue, index, array) => {
+  let sum = previousValue + parseFloat(currentValue.amount);
+  return Math.round(sum*100)/100;
+},0)
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
