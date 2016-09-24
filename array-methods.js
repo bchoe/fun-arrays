@@ -41,7 +41,7 @@ var roundedDollar = dataset.bankBalances.map((account) => {
 */
 var roundedDime = dataset.bankBalances.map((account) => {
   return {
-    'amount': Math.round(10 * account.amount) / 10,
+    'amount': Math.round(account.amount * 10) / 10,
     'state': account.state
   }
 });
@@ -49,7 +49,7 @@ var roundedDime = dataset.bankBalances.map((account) => {
 // set sumOfBankBalances to the sum of all amounts in bankBalances
 var sumOfBankBalances = dataset.bankBalances.reduce((previousValue, currentValue, index, array) => {
   let sum = previousValue + parseFloat(currentValue.amount);
-  return Math.round(sum*100)/100;
+  return Math.round(sum * 100) / 100;
 },0)
 
 /*
@@ -64,7 +64,23 @@ var sumOfBankBalances = dataset.bankBalances.reduce((previousValue, currentValue
     Delaware
   the result should be rounded to the nearest cent
  */
-var sumOfInterests = null;
+var sumOfInterests = dataset.bankBalances.filter((element) =>{
+  if (element.state === 'WI'||
+    element.state === 'IL' ||
+    element.state === 'WY' ||
+    element.state === 'OH' ||
+    element.state === 'GA' ||
+    element.state === 'DE'){
+    return true;
+  }return false;
+})
+//console.log(sumOfInterests);
+  .map((element) => {
+    return parseFloat(element.amount) * .189;
+})
+  .reduce((previous,current) => {
+    return Math.round((previous + current) * 100) / 100;
+});
 
 /*
   set sumOfHighInterests to the sum of the 18.9% interest
@@ -80,7 +96,32 @@ var sumOfInterests = null;
     Delaware
   the result should be rounded to the nearest cent
  */
-var sumOfHighInterests = null;
+var sumOfHighInterests = dataset.bankBalances.filter((element) => {
+  if (element.state !== 'WI'&&
+    element.state !== 'IL'&&
+    element.state !== 'WY'&&
+    element.state !== 'OH'&&
+    element.state !== 'GA'&&
+    element.state !== 'DE'){
+    return true;
+  }return false;
+})
+  .map((element) => {
+    //console.log(element);
+    return parseFloat(element.amount) * .189;
+})
+  .filter((element) => {
+    console.log(element);
+    return element > 50000;
+})
+  .reduce((previous,current) => {
+    //console.log('previous',previous,'current',current);
+    return Math.round((previous + current) * 100) / 100;
+});
+
+
+//console.log(sumOfHighInterests);
+//console.log(dataset);
 
 /*
   aggregate the sum of bankBalance amounts
